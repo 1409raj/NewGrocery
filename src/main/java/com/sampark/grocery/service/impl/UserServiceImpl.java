@@ -444,9 +444,35 @@ public class UserServiceImpl implements UserService {
 		        else {
 		        	
 		    		list = dao.getUserBysearch(usersearch,roleid);
+		    		Iterator<UsersEntity> it = list.iterator();
+		    		while (it.hasNext()) {
+		    			user =  it.next();
+		    			userAddressDetails userAddressDetails = new userAddressDetails();
+		    			
+		    			userAddressDetails.setUserId(user.getUserId());
+		    			userAddressDetails.setFirstName(user.getFirstName());
+		    			userAddressDetails.setLastName(user.getLastName());
+		    			userAddressDetails.setAddressLine1(user.getAddressLine1());
+		    			userAddressDetails.setAddressLine2(user.getAddressLine2());
+		    			userAddressDetails.setEmailId(user.getEmailId());
+		    			userAddressDetails.setStorename(user.getStorename());
+		    			
+		    			userAddressDetails.setPhone1(user.getPhone1());
+		    			userAddressDetails.setState(user.getState());
+		    			userAddressDetails.setCity(user.getCity());
+		    			userAddressDetails.setPincode(user.getPincode());
+		    			userAddressDetails.setLat(user.getLat());
+		    			userAddressDetails.setLng(user.getLng());
+		    			userAddressDetails.setStartshoptime(user.getStartshoptime());
+		    			userAddressDetails.setEndshoptime(user.getEndshoptime());
+		    			userAddressDetails.setSponsorby(user.getSponsorby());
+		    			userAddressDetails.setImagename(user.getImagename());
+		    			userAddressDetails.setImagepath(ApiConstants.server_url+"images?image="+user.getImagename()+"&folder=profileimage");
+		    			usersearchlist.add(userAddressDetails);
+		    		}
 		    		if (list.size()>0) {
 		    			
-		    			domain.setObject(list);
+		    			domain.setObject(usersearchlist);
 		    			domain.setMessage("success");
 		    			domain.setHasError(false);
 		    		} else {
