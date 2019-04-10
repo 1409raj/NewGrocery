@@ -1103,6 +1103,40 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return null;
 	}
+	
+	@Override
+	@Transactional
+	public Boolean CanceldecreaseProductMerchanttnoOfPurchase(Integer pid, Integer wid, Integer mid, Integer quantity) {
+		Boolean found = false;
+		Query query = null;
+
+		String sqlQuery = "UPDATE merchant_products SET no_of_purchase=no_of_purchase-1, quantity= quantity+:quantity WHERE product_id=:pid  and unit_id = :wid  and merchant_id = :mid";
+
+		try {
+			try {
+				query = getEntityManager().createNativeQuery(sqlQuery);
+				query.setParameter("pid", pid);
+				query.setParameter("wid", wid);
+				query.setParameter("mid", mid);
+				query.setParameter("quantity", quantity);
+				int i = query.executeUpdate();
+
+				if (i > 0) {
+					found = true;
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return found;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	
 
 	@Override
 	public List<ProductCartHistory> getRecentProductsCartDetail(Integer customerid) {
@@ -1353,5 +1387,4 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 
-	
 }

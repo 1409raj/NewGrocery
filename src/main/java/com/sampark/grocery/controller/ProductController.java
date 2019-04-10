@@ -461,7 +461,68 @@ public class ProductController {
 		return new ResponseEntity<Domain<List<ProductsCartEntity>>>(entity,HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/placeOrder",method=RequestMethod.POST)
+	@RequestMapping(value="/CheckplaceOrder",method=RequestMethod.POST)
+	public @ResponseBody ResponseObject checkProduct(
+			@RequestParam("cartid") String cartid,
+			@RequestParam("ordercartid") String orderid,
+			@RequestParam("productid") String productid,
+			@RequestParam("weight") String weight,
+			@RequestParam("price") String price,
+			@RequestParam("unit") String unit,
+			@RequestParam("unitweightid") String unitweightid,
+			@RequestParam("merchantid") String merchantid,
+			@RequestParam("customeruserid") String customeruserid,
+			@RequestParam("quantity") String quantity)
+	{
+          Domain<Object> domain = new Domain<Object>();
+		  ResponseObject rsObject=new ResponseObject();
+		  
+		  ProductQuantityLimit productQuantityLimit = new ProductQuantityLimit();
+			productQuantityLimit.setCartidList(cartid);
+			productQuantityLimit.setCustomeruseridList(customeruserid);
+			productQuantityLimit.setMerchantidList(merchantid);
+			productQuantityLimit.setOrdercartidList(orderid);
+			productQuantityLimit.setProductididList(productid);
+			productQuantityLimit.setUnitweightidList(unitweightid);
+			productQuantityLimit.setQuantityList(quantity);
+			System.out.println(productQuantityLimit);
+			domain=productService.quantityGreator(productQuantityLimit);
+			
+			if(domain.getMessage().equals("true")) {
+				
+				Date date = new Date();
+				List<String> cartidList = Arrays.asList(cartid.split(",")); 
+				List<String> ordercartidList = Arrays.asList(orderid.split(","));
+				List<String> productididList = Arrays.asList(productid.split(","));
+				List<String> unitweightidList = Arrays.asList(unitweightid.split(",")); 
+				List<String> merchantidList = Arrays.asList(merchantid.split(","));
+				List<String> customeruseridList = Arrays.asList(customeruserid.split(","));
+				List<String> quantityList = Arrays.asList(quantity.split(","));
+				List<String> weightList = Arrays.asList(weight.split(","));
+				List<String> priceList = Arrays.asList(price.split(","));
+				List<String> unitList = Arrays.asList(unit.split(","));
+				
+				for (int i = 0; i < cartidList.size(); i++) {
+					if(dao.IncreaseProductMerchanttnoOfPurchase(Integer.parseInt(productididList.get(i)), Integer.parseInt(unitweightidList.get(i)), Integer.parseInt(merchantidList.get(i)),Integer.parseInt(quantityList.get(i)))) {
+						System.out.println("Increase merchant product no of purchase and decrease quantity");
+					}else {
+						System.out.println("Not merchant product increase");
+					}
+				}
+				
+			}else {
+				
+				rsObject.setObject(domain);
+				rsObject.setHasError(true);
+				rsObject.setMessage("quantity is greator");
+				return rsObject;
+			}
+		return null;
+	
+	}
+	
+	
+	@RequestMapping(value="/pplaceOrder",method=RequestMethod.POST)
 	public @ResponseBody ResponseObject saveProduct(
 			@RequestParam("cartid") String cartid,
 			@RequestParam("ordercartid") String orderid,
@@ -481,21 +542,7 @@ public class ProductController {
 		
 		ResponseObject rsObject=new ResponseObject();
 		
-		
-		ProductQuantityLimit productQuantityLimit = new ProductQuantityLimit();
-		productQuantityLimit.setCartidList(cartid);
-		productQuantityLimit.setCustomeruseridList(customeruserid);
-		productQuantityLimit.setMerchantidList(merchantid);
-		productQuantityLimit.setOrdercartidList(orderid);
-		productQuantityLimit.setProductididList(productid);
-		productQuantityLimit.setUnitweightidList(unitweightid);
-		productQuantityLimit.setQuantityList(quantity);
-		System.out.println(productQuantityLimit);
-		domain=productService.quantityGreator(productQuantityLimit);
-		
-		if(domain.getMessage().equals("true")) {
-			
-			Date date = new Date();
+		    Date date = new Date();
 			List<String> cartidList = Arrays.asList(cartid.split(",")); 
 			List<String> ordercartidList = Arrays.asList(orderid.split(","));
 			List<String> productididList = Arrays.asList(productid.split(","));
@@ -540,11 +587,11 @@ public class ProductController {
 				}else {
 					System.out.println("Not unit weight increase");
 				}
-				if(dao.IncreaseProductMerchanttnoOfPurchase(Integer.parseInt(productididList.get(i)), Integer.parseInt(unitweightidList.get(i)), Integer.parseInt(merchantidList.get(i)),Integer.parseInt(quantityList.get(i)))) {
+				/*if(dao.IncreaseProductMerchanttnoOfPurchase(Integer.parseInt(productididList.get(i)), Integer.parseInt(unitweightidList.get(i)), Integer.parseInt(merchantidList.get(i)),Integer.parseInt(quantityList.get(i)))) {
 					System.out.println("Increase merchant product no of purchase and decrease quantity");
 				}else {
 					System.out.println("Not merchant product increase");
-				}
+				}*/
 	            /* if(i==0) {
 				trackOrderEntity.setCrearteOn(date);
 				trackOrderEntity.setUpdatedOn(date);
@@ -566,15 +613,51 @@ public class ProductController {
 			rsObject.setMessage("Order Placed Successfully");
 			 return rsObject;
 			
-		}else {
-			
-			rsObject.setObject(domain);
-			rsObject.setHasError(true);
-			rsObject.setMessage("quantity is greator");
-			return rsObject;
-		}
 		
-		
+	}
+	
+	@RequestMapping(value="/CancelplaceOrder",method=RequestMethod.POST)
+	public @ResponseBody ResponseObject cnacelpaymentProduct(
+			@RequestParam("cartid") String cartid,
+			@RequestParam("ordercartid") String orderid,
+			@RequestParam("productid") String productid,
+			@RequestParam("weight") String weight,
+			@RequestParam("price") String price,
+			@RequestParam("unit") String unit,
+			@RequestParam("unitweightid") String unitweightid,
+			@RequestParam("merchantid") String merchantid,
+			@RequestParam("customeruserid") String customeruserid,
+			@RequestParam("quantity") String quantity)
+	{
+         
+		  ResponseObject rsObject=new ResponseObject();
+		 	
+				Date date = new Date();
+				List<String> cartidList = Arrays.asList(cartid.split(",")); 
+				List<String> ordercartidList = Arrays.asList(orderid.split(","));
+				List<String> productididList = Arrays.asList(productid.split(","));
+				List<String> unitweightidList = Arrays.asList(unitweightid.split(",")); 
+				List<String> merchantidList = Arrays.asList(merchantid.split(","));
+				List<String> customeruseridList = Arrays.asList(customeruserid.split(","));
+				List<String> quantityList = Arrays.asList(quantity.split(","));
+				List<String> weightList = Arrays.asList(weight.split(","));
+				List<String> priceList = Arrays.asList(price.split(","));
+				List<String> unitList = Arrays.asList(unit.split(","));
+				
+				for (int i = 0; i < cartidList.size(); i++) {
+					if(dao.CanceldecreaseProductMerchanttnoOfPurchase(Integer.parseInt(productididList.get(i)), Integer.parseInt(unitweightidList.get(i)), Integer.parseInt(merchantidList.get(i)),Integer.parseInt(quantityList.get(i)))) {
+						System.out.println("Decrease merchant product no of purchase and Increse quantity");
+						rsObject.setHasError(false);
+						rsObject.setMessage("Updated Successfully");
+					}else {
+						System.out.println("Not merchant product increase");
+						rsObject.setHasError(true);
+						rsObject.setMessage("Not Updated Successfully");
+					}
+				}
+				
+				 return rsObject;
+	
 	}
 	
 	@RequestMapping(value = "/getRecentProductDetail", method = RequestMethod.POST)

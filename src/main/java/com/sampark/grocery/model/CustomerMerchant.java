@@ -9,6 +9,9 @@ public class CustomerMerchant {
 	private String customerfirstname;
 	private String customerlastname;
 	private String customeremailid;
+	private String storename;
+	private String imagepath;
+	private Float wallet;
 	private String addressLine1;
 	private String addressLine2;
 	private String city;
@@ -49,6 +52,26 @@ public class CustomerMerchant {
 	}
 	public void setCustomeremailid(String customeremailid) {
 		this.customeremailid = customeremailid;
+	}
+	
+	
+	public String getStorename() {
+		return storename;
+	}
+	public void setStorename(String storename) {
+		this.storename = storename;
+	}
+	public String getImagepath() {
+		return imagepath;
+	}
+	public void setImagepath(String imagepath) {
+		this.imagepath = imagepath;
+	}
+	public Float getWallet() {
+		return wallet;
+	}
+	public void setWallet(Float wallet) {
+		this.wallet = wallet;
 	}
 	public String getAddressLine1() {
 		return addressLine1;

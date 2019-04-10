@@ -215,11 +215,29 @@ public class UserDaoImpl implements UserDao {
 		}
 		return found;
 	}
+	
+	
+	@Override
+	public CustomerMerchantEntity ismerchantcustomer(Integer merchantid, Integer customerid) {
+		CustomerMerchantEntity bean = new CustomerMerchantEntity();
+		String sqlQuery = "Select * from grocerydb.merchant_customer where merchant_id = :merchantid and user_id=:customerid";
+		Query query = null;
+		try {
+			
+			query = getEntityManager().createNativeQuery(sqlQuery, CustomerMerchantEntity.class);
+			query.setParameter("merchantid", merchantid);
+			query.setParameter("customerid", customerid);
+			bean = (CustomerMerchantEntity) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bean;
+	}
 
 	@Override
 	public List<CustomerMerchantEntity> getCustomerMerchnat(Integer merchantid) {
 		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
-		String sqlQuery = "Select * from grocerydb.merchant_customer where merchant_id =:merchantid";
+		String sqlQuery = "Select * from grocerydb.merchant_customer where merchant_id =:merchantid and status ='C'";
 		Query query = null;
 		try {
 			query = getEntityManager().createNativeQuery(sqlQuery, CustomerMerchantEntity.class);
@@ -231,6 +249,55 @@ public class UserDaoImpl implements UserDao {
 		}
 		return list;
 	}
+	
+	@Override
+	public List<CustomerMerchantEntity> getPendingCustomerMerchnat(Integer merchantid) {
+		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
+		String sqlQuery = "Select * from grocerydb.merchant_customer where recive_user_id =:merchantid and recive_userid_status ='R'";
+		Query query = null;
+		try {
+			query = getEntityManager().createNativeQuery(sqlQuery, CustomerMerchantEntity.class);
+			query.setParameter("merchantid", merchantid);
+			list = (ArrayList<CustomerMerchantEntity>) query.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public List<CustomerMerchantEntity> getMerchnatCustomer(Integer customerid) {
+		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
+		String sqlQuery = "Select * from grocerydb.merchant_customer where user_id =:customerid and status ='C'";
+		Query query = null;
+		try {
+			query = getEntityManager().createNativeQuery(sqlQuery, CustomerMerchantEntity.class);
+			query.setParameter("customerid", customerid);
+			list = (ArrayList<CustomerMerchantEntity>) query.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<CustomerMerchantEntity> getPendingMerchnatCustomer(Integer customerid) {
+		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
+		String sqlQuery = "Select * from grocerydb.merchant_customer where recive_user_id =:customerid and recive_userid_status ='R'";
+		Query query = null;
+		try {
+			query = getEntityManager().createNativeQuery(sqlQuery, CustomerMerchantEntity.class);
+			query.setParameter("customerid", customerid);
+			list = (ArrayList<CustomerMerchantEntity>) query.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 
 	@Override
 	@Transactional
@@ -358,6 +425,42 @@ public class UserDaoImpl implements UserDao {
 		return list;
 	}
 
-	
+	@Override
+	@Transactional
+	public Boolean updateCustomerMerchantSatus(Integer id, String status) {
+		
+		String sqlQuery = "update  grocerydb.merchant_customer set status=:status, send_userid_status=:status, recive_userid_status=:status where row_id=:id";
 
+		Query query = null;
+		query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("id", id);
+		query.setParameter("status", status);
+
+		int i = query.executeUpdate();
+		if (i > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public Boolean updateWallet(Integer id, String wallet) {
+		String sqlQuery = "update  grocerydb.users set wallet=:wallet where user_id=:id";
+
+		Query query = null;
+		query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("id", id);
+		query.setParameter("wallet", wallet);
+
+		int i = query.executeUpdate();
+		if (i > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	
 }

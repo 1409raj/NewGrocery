@@ -12,6 +12,7 @@ public class userAddressDetails {
 	private String storename;
 	private String addressLine1;
 	private String addressLine2;
+	private String frndstatus;
 	private String city;
 	private String state;
 	private String pincode;
@@ -63,6 +64,12 @@ public class userAddressDetails {
 	}
 	public void setAddressLine2(String addressLine2) {
 		this.addressLine2 = addressLine2;
+	}
+	public String getFrndstatus() {
+		return frndstatus;
+	}
+	public void setFrndstatus(String frndstatus) {
+		this.frndstatus = frndstatus;
 	}
 	public String getCity() {
 		return city;

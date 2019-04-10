@@ -140,6 +140,8 @@ public interface ProductDao {
 	public Boolean IncreaseProductweightnoOfPurchase(Integer wid);
 
 	public Boolean IncreaseProductMerchanttnoOfPurchase(Integer pid, Integer wid, Integer mid, Integer quantity);
+	
+	public Boolean CanceldecreaseProductMerchanttnoOfPurchase(Integer pid, Integer wid, Integer mid, Integer quantity);
 
 	public List<ProductCartHistory> getRecentProductsCartDetail(Integer customerid);
 

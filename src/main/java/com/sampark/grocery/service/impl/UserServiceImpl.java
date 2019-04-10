@@ -109,6 +109,7 @@ public class UserServiceImpl implements UserService {
 	public Domain<String> createUser(UsersEntity user) {
 		String password = EncryptionUtil.encrypt(user.getPasswd());
 		user.setPasswd(password);
+		user.setWallet(0.00);
 		Domain<String> s = new Domain<String>();
 		
 		if(dao.isUserExist(user.getPhone1())) {
@@ -200,11 +201,23 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Domain<String> saveCustomerforMerchant(CustomerMerchantEntity customerMerchantEntity) {
 		  Domain<String> domain = new Domain<String>();
+		  
+		  if(customerMerchantEntity.getSenduserid().equals(customerMerchantEntity.getCustomerid())){
+			  
+			  customerMerchantEntity.setReciveuserid(customerMerchantEntity.getMerchantid());
+			  customerMerchantEntity.setSendstatus("S");
+			  customerMerchantEntity.setRecivestatus("R");
+		  }else {
+			  customerMerchantEntity.setReciveuserid(customerMerchantEntity.getCustomerid());
+			  customerMerchantEntity.setSendstatus("S");
+			  customerMerchantEntity.setRecivestatus("R");
+		  }
 		   
 		  if(dao.ismerchantcustomersaveExist(customerMerchantEntity.getMerchantid(), customerMerchantEntity.getCustomerid())) {
 				domain.setMessage("Customer already add.");
 				domain.setHasError(true);
-			} else {
+			}
+		  else {
 			         if(dao.saveCustomerforMerchant(customerMerchantEntity))
 			        {
 				    domain.setMessage("Customer saved successfully.");
@@ -239,6 +252,7 @@ public class UserServiceImpl implements UserService {
 			customerMerchant.setCustomerfirstname(customerList.getUsersEntity().getFirstName());
 			customerMerchant.setCustomerlastname(customerList.getUsersEntity().getLastName());
 			customerMerchant.setCustomeremailid(customerList.getUsersEntity().getEmailId());
+			customerMerchant.setImagepath(ApiConstants.server_url+"images?image="+customerList.getUsersEntity().getImagename()+"&folder=profileimage");
 			customerMerchant.setAddressLine1(customerList.getUsersEntity().getAddressLine1());
 			customerMerchant.setAddressLine2(customerList.getUsersEntity().getAddressLine2());
 			customerMerchant.setCity(customerList.getUsersEntity().getCity());
@@ -250,15 +264,142 @@ public class UserServiceImpl implements UserService {
 		if (list.size()>0) {
 			
 			domain.setObject(customerMerchantList);
-			domain.setMessage("Customer list");
+			domain.setMessage("Connected Friend list");
 			domain.setHasError(false);
 		} else {
-			domain.setMessage("customer does not exist");
+			domain.setMessage("NO any connected");
 			domain.setHasError(true);
 		}
 
 		return domain;
 		}
+	
+
+	@Override
+	public Domain<List<CustomerMerchantEntity>> getPendingCustomerMerchnat(Integer merchantid) {
+		
+		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
+		CustomerMerchantEntity customerList = new CustomerMerchantEntity();
+		Domain<List<CustomerMerchantEntity>> domain = new Domain<List<CustomerMerchantEntity>>();
+		
+		List customerMerchantList = new ArrayList<>();
+	
+		list = dao.getPendingCustomerMerchnat(merchantid);
+		Iterator<CustomerMerchantEntity> it = list.iterator();
+		while (it.hasNext()) {
+			customerList =  it.next();
+			CustomerMerchant customerMerchant = new CustomerMerchant();
+			customerMerchant.setRowid(customerList.getRowId());
+			customerMerchant.setCustomerid(customerList.getUsersEntity().getUserId());
+			customerMerchant.setStatus(customerList.getStatus());
+			customerMerchant.setCustomerfirstname(customerList.getUsersEntity().getFirstName());
+			customerMerchant.setCustomerlastname(customerList.getUsersEntity().getLastName());
+			customerMerchant.setCustomeremailid(customerList.getUsersEntity().getEmailId());
+			customerMerchant.setImagepath(ApiConstants.server_url+"images?image="+customerList.getUsersEntity().getImagename()+"&folder=profileimage");
+			customerMerchant.setAddressLine1(customerList.getUsersEntity().getAddressLine1());
+			customerMerchant.setAddressLine2(customerList.getUsersEntity().getAddressLine2());
+			customerMerchant.setCity(customerList.getUsersEntity().getCity());
+			customerMerchant.setState(customerList.getUsersEntity().getState());
+			customerMerchant.setPincode(customerList.getUsersEntity().getPincode());
+			customerMerchantList.add(customerMerchant);
+		}
+		
+		if (list.size()>0) {
+			
+			domain.setObject(customerMerchantList);
+			domain.setMessage("Pending Merchant list");
+			domain.setHasError(false);
+		} else {
+			domain.setMessage("No Any Merchant Pending");
+			domain.setHasError(true);
+		}
+
+		return domain;
+		}
+
+	@Override
+	public Domain<List<CustomerMerchantEntity>> getMerchnatCustomer(Integer customerid) {
+		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
+		CustomerMerchantEntity customerList = new CustomerMerchantEntity();
+		Domain<List<CustomerMerchantEntity>> domain = new Domain<List<CustomerMerchantEntity>>();
+		
+		List customerMerchantList = new ArrayList<>();
+	
+		list = dao.getMerchnatCustomer(customerid);
+		Iterator<CustomerMerchantEntity> it = list.iterator();
+		while (it.hasNext()) {
+			customerList =  it.next();
+			CustomerMerchant customerMerchant = new CustomerMerchant();
+			customerMerchant.setRowid(customerList.getRowId());
+			customerMerchant.setCustomerid(customerList.getUsersEntityM().getUserId());
+			customerMerchant.setStatus(customerList.getStatus());
+			customerMerchant.setCustomerfirstname(customerList.getUsersEntityM().getFirstName());
+			customerMerchant.setCustomerlastname(customerList.getUsersEntityM().getLastName());
+			customerMerchant.setCustomeremailid(customerList.getUsersEntityM().getEmailId());
+			customerMerchant.setStorename(customerList.getUsersEntityM().getStorename());
+			customerMerchant.setImagepath(ApiConstants.server_url+"images?image="+customerList.getUsersEntityM().getImagename()+"&folder=profileimage");
+			customerMerchant.setAddressLine1(customerList.getUsersEntityM().getAddressLine1());
+			customerMerchant.setAddressLine2(customerList.getUsersEntityM().getAddressLine2());
+			customerMerchant.setCity(customerList.getUsersEntityM().getCity());
+			customerMerchant.setState(customerList.getUsersEntityM().getState());
+			customerMerchant.setPincode(customerList.getUsersEntityM().getPincode());
+			customerMerchantList.add(customerMerchant);
+		}
+		
+		if (list.size()>0) {
+			
+			domain.setObject(customerMerchantList);
+			domain.setMessage("Connected Friend list");
+			domain.setHasError(false);
+		} else {
+			domain.setMessage("No Any Connected Friends");
+			domain.setHasError(true);
+		}
+
+		return domain;
+	}
+
+	@Override
+	public Domain<List<CustomerMerchantEntity>> getPendingMerchnatCustomer(Integer customerid) {
+		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
+		CustomerMerchantEntity customerList = new CustomerMerchantEntity();
+		Domain<List<CustomerMerchantEntity>> domain = new Domain<List<CustomerMerchantEntity>>();
+		
+		List customerMerchantList = new ArrayList<>();
+	
+		list = dao.getPendingMerchnatCustomer(customerid);
+		Iterator<CustomerMerchantEntity> it = list.iterator();
+		while (it.hasNext()) {
+			customerList =  it.next();
+			CustomerMerchant customerMerchant = new CustomerMerchant();
+			customerMerchant.setRowid(customerList.getRowId());
+			customerMerchant.setCustomerid(customerList.getUsersEntityM().getUserId());
+			customerMerchant.setStatus(customerList.getStatus());
+			customerMerchant.setCustomerfirstname(customerList.getUsersEntityM().getFirstName());
+			customerMerchant.setCustomerlastname(customerList.getUsersEntityM().getLastName());
+			customerMerchant.setCustomeremailid(customerList.getUsersEntityM().getEmailId());
+			customerMerchant.setStorename(customerList.getUsersEntityM().getStorename());
+			customerMerchant.setImagepath(ApiConstants.server_url+"images?image="+customerList.getUsersEntityM().getImagename()+"&folder=profileimage");
+			customerMerchant.setAddressLine1(customerList.getUsersEntityM().getAddressLine1());
+			customerMerchant.setAddressLine2(customerList.getUsersEntityM().getAddressLine2());
+			customerMerchant.setCity(customerList.getUsersEntityM().getCity());
+			customerMerchant.setState(customerList.getUsersEntityM().getState());
+			customerMerchant.setPincode(customerList.getUsersEntityM().getPincode());
+			customerMerchantList.add(customerMerchant);
+		}
+		
+		if (list.size()>0) {
+			
+			domain.setObject(customerMerchantList);
+			domain.setMessage("Pending list");
+			domain.setHasError(false);
+		} else {
+			domain.setMessage("No Pending Friends");
+			domain.setHasError(true);
+		}
+
+		return domain;
+	}
 
 	@Override
 	public Domain<userAddressDetails> getalluserdetails(Integer merchantuserid) {
@@ -396,11 +537,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Domain<List<UsersEntity>> getuserbysearch(String usersearch, Integer roleid) {
+	public Domain<List<UsersEntity>> getuserbysearch(String usersearch, Integer roleid,Integer cmid) {
 		
 		        List<UsersEntity> list = new ArrayList<UsersEntity>();
 		        Domain<List<UsersEntity>> domain = new Domain<List<UsersEntity>>();
 		        UsersEntity user = new UsersEntity();
+		        CustomerMerchantEntity cmentity = new CustomerMerchantEntity();
 		        List usersearchlist = new ArrayList<>();
 		        if(usersearch.contains("@")) {
 		        	list = dao.getUserBysearchemail(usersearch,roleid);
@@ -408,6 +550,27 @@ public class UserServiceImpl implements UserService {
 		    		while (it.hasNext()) {
 		    			user =  it.next();
 		    			userAddressDetails userAddressDetails = new userAddressDetails();
+		    			if(roleid.equals(2)) {
+		    				cmentity = dao.ismerchantcustomer(user.getUserId(), cmid);
+		    				if(cmentity.getRowId() != null) {
+		    					if(cmentity.getSenduserid().equals(cmid)) {
+			    					userAddressDetails.setFrndstatus(cmentity.getRecivestatus());
+			    				}else {
+			    					userAddressDetails.setFrndstatus(cmentity.getStatus());
+			    				}
+		    				}
+		    				
+		    			}else
+		    			{
+		    				cmentity = dao.ismerchantcustomer(cmid, user.getUserId());
+		    				if(cmentity.getRowId() != null) {
+		    					if(cmentity.getSenduserid().equals(cmid)) {
+			    					userAddressDetails.setFrndstatus(cmentity.getRecivestatus());
+			    				}else {
+			    					userAddressDetails.setFrndstatus(cmentity.getStatus());
+			    				}
+		    				}
+		    			}
 		    			
 		    			userAddressDetails.setUserId(user.getUserId());
 		    			userAddressDetails.setFirstName(user.getFirstName());
@@ -448,7 +611,27 @@ public class UserServiceImpl implements UserService {
 		    		while (it.hasNext()) {
 		    			user =  it.next();
 		    			userAddressDetails userAddressDetails = new userAddressDetails();
-		    			
+		    			if(roleid.equals(2)) {
+		    				cmentity = dao.ismerchantcustomer(user.getUserId(), cmid);
+		    				if(cmentity.getRowId() != null) {
+		    					if(cmentity.getSenduserid().equals(cmid)) {
+			    					userAddressDetails.setFrndstatus(cmentity.getRecivestatus());
+			    				}else {
+			    					userAddressDetails.setFrndstatus(cmentity.getStatus());
+			    				}
+		    				}
+		    			}else
+		    			{
+		    				cmentity = dao.ismerchantcustomer(cmid, user.getUserId());
+		    				if(cmentity.getRowId() != null) {
+		    					if(cmentity.getSenduserid().equals(cmid)) {
+			    					userAddressDetails.setFrndstatus(cmentity.getRecivestatus());
+			    				}else {
+			    					userAddressDetails.setFrndstatus(cmentity.getStatus());
+			    				}
+		    				}
+		    				
+		    			}
 		    			userAddressDetails.setUserId(user.getUserId());
 		    			userAddressDetails.setFirstName(user.getFirstName());
 		    			userAddressDetails.setLastName(user.getLastName());
@@ -485,6 +668,34 @@ public class UserServiceImpl implements UserService {
 		        return domain;
 	}
 
+	@Override
+	public Domain<String> updateCustomerMerchantSatus(Integer id, String status) {
+		 Domain<String> domain = new Domain<String>();
+		 
+         if(dao.updateCustomerMerchantSatus(id, status)) {
+        	 domain.setMessage("Status Updated Successfully");
+ 			domain.setHasError(false);
+ 		} else {
+ 			domain.setMessage("not updated");
+ 			domain.setHasError(true);			
+ 		}
+ 					
+		return domain;
+	}
+
+	@Override
+	public Domain<String> updateWallet(Integer id, String wallet) {
+		 Domain<String> domain = new Domain<String>();
+         if(dao.updateWallet(id, wallet)) {
+        	domain.setMessage("wallet Updated Successfully");
+ 			domain.setHasError(false);
+ 		} else {
+ 			domain.setMessage("not updated");
+ 			domain.setHasError(true);			
+ 		}
+ 					
+		return domain;
+	}
 
 
 }

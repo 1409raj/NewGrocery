@@ -15,14 +15,21 @@ public interface UserService {
 	public Domain<String> createUser(UsersEntity user);
 	public Domain<List<UsersEntity>> getCustomerByName(String name);
 	public Domain<String> saveCustomerforMerchant(CustomerMerchantEntity customerMerchantEntity);
+	
 	public Domain<List<CustomerMerchantEntity>> getCustomerMerchnat(Integer merchantid);
+	public Domain<List<CustomerMerchantEntity>> getPendingCustomerMerchnat(Integer merchantid);
+	
+	public Domain<List<CustomerMerchantEntity>> getMerchnatCustomer(Integer merchantid);
+	public Domain<List<CustomerMerchantEntity>> getPendingMerchnatCustomer(Integer merchantid);
 	
 	public Domain<userAddressDetails> getalluserdetails(Integer merchantuserid);
 	public Domain<String> updateUserDetails(userAddressDetails userAddressDetails);
 	
 	public Domain<String> updateUserImage(String userid,String imagename);
+	public Domain<String> updateCustomerMerchantSatus(Integer id,String status);
+	public Domain<String> updateWallet(Integer id,String wallet);
 	public Domain<String> deleteUserImage(Integer userid);
 	public Domain<List<UsersEntity>> getAllMerchnatsforStorename();
 	
-	public Domain<List<UsersEntity>> getuserbysearch(String usersearch,Integer roleid);
+	public Domain<List<UsersEntity>> getuserbysearch(String usersearch,Integer roleid,Integer cmid);
 }

@@ -27,10 +27,22 @@ public interface UserDao {
 			Double lng,String startshoptime,String endshoptime,String sponsorby);
 
 	public Boolean saveCustomerforMerchant(CustomerMerchantEntity customerMerchantEntity);
+	
+	public Boolean updateCustomerMerchantSatus(Integer id, String status);
+	
+	public Boolean updateWallet(Integer id, String wallet);
 
 	public Boolean ismerchantcustomersaveExist(Integer merchantid, Integer customerid);
+	
+	public CustomerMerchantEntity ismerchantcustomer(Integer merchantid, Integer customerid);
 
 	public List<CustomerMerchantEntity> getCustomerMerchnat(Integer merchantid);
+	
+	public List<CustomerMerchantEntity> getPendingCustomerMerchnat(Integer merchantid);
+	
+    public List<CustomerMerchantEntity> getMerchnatCustomer(Integer customerid);
+	
+	public List<CustomerMerchantEntity> getPendingMerchnatCustomer(Integer customerid);
 
 	public Boolean updateUserImage(Integer userid, String imagename);
 	

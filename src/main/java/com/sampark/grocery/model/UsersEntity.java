@@ -61,6 +61,9 @@ public class UsersEntity {
 	@Column(name="sponsorby")
 	private String sponsorby;
 	
+	@Column(name="wallet")
+	private Double wallet;
+	
 	@Column(name="startshoptime")
 	private String startshoptime;
 	
@@ -266,6 +269,14 @@ public class UsersEntity {
 		this.sponsorby = sponsorby;
 	}
 
+	public Double getWallet() {
+		return wallet;
+	}
+
+	public void setWallet(Double wallet) {
+		this.wallet = wallet;
+	}
+
 	public String getStartshoptime() {
 		return startshoptime;
 	}
@@ -361,7 +372,6 @@ public class UsersEntity {
 	public void setImagepath(String imagepath) {
 		this.imagepath = imagepath;
 	}
-	
 
 	@Override
 	public String toString() {
@@ -369,13 +379,15 @@ public class UsersEntity {
 				+ phone1 + ", phone2=" + phone2 + ", emailId=" + emailId + ", storename=" + storename + ", passwd="
 				+ passwd + ", roleId=" + roleId + ", addressLine1=" + addressLine1 + ", addressLine2=" + addressLine2
 				+ ", city=" + city + ", state=" + state + ", pincode=" + pincode + ", lat=" + lat + ", lng=" + lng
-				+ ", sponsorby=" + sponsorby + ", startshoptime=" + startshoptime + ", endshoptime=" + endshoptime
-				+ ", imagename=" + imagename + ", addressProofType=" + addressProofType + ", addressProofLocation="
-				+ addressProofLocation + ", idProofType=" + idProofType + ", idProofLocation=" + idProofLocation
-				+ ", gstNo=" + gstNo + ", token=" + token + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
-				+ ", imagepath=" + imagepath + ", authToken=" + authToken + ", roleEntity=" + roleEntity
-				+ ", priceEntity=" + priceEntity + "]";
+				+ ", sponsorby=" + sponsorby + ", wallet=" + wallet + ", startshoptime=" + startshoptime
+				+ ", endshoptime=" + endshoptime + ", imagename=" + imagename + ", addressProofType=" + addressProofType
+				+ ", addressProofLocation=" + addressProofLocation + ", idProofType=" + idProofType
+				+ ", idProofLocation=" + idProofLocation + ", gstNo=" + gstNo + ", token=" + token + ", createdAt="
+				+ createdAt + ", updatedAt=" + updatedAt + ", AuthToken=" + AuthToken + ", imagepath=" + imagepath
+				+ ", authToken=" + authToken + ", roleEntity=" + roleEntity + ", priceEntity=" + priceEntity + "]";
 	}
+	
 
+	
 	
 }

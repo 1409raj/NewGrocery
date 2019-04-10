@@ -104,11 +104,14 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/savecustomerformerchant",method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Domain<String>> savecustomerForMerchant(@RequestParam("merchantid") Integer merchantId,@RequestParam("customerid") Integer customerid) {
+	public @ResponseBody ResponseEntity<Domain<String>> savecustomerForMerchant(@RequestParam("merchantid") Integer merchantId,
+			@RequestParam("customerid") Integer customerid,
+			@RequestParam("sentuserid") Integer senduserid) {
 		Date date = new Date();
 		CustomerMerchantEntity customerMerchantEntity = new CustomerMerchantEntity();
 		customerMerchantEntity.setMerchantid(merchantId);
 		customerMerchantEntity.setCustomerid(customerid);
+		customerMerchantEntity.setSenduserid(senduserid);
 		customerMerchantEntity.setStatus("P");
 		customerMerchantEntity.setCreatedAt(date);
 		
@@ -116,9 +119,27 @@ public class UserController {
 		return new ResponseEntity<>(customers,HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/getCustomerlistforMerchant", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Domain<List<CustomerMerchantEntity>>> getCustomerlistforMerchant(@RequestParam("merchantid") String merchantid) {
+	@RequestMapping(value = "/getConnectedCustomerlistforMerchant", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Domain<List<CustomerMerchantEntity>>> getConnectedCustomerlistforMerchant(@RequestParam("merchantid") String merchantid) {
 		Domain<List<CustomerMerchantEntity>> entity = userService.getCustomerMerchnat(Integer.parseInt(merchantid));
+		return new ResponseEntity<Domain<List<CustomerMerchantEntity>>>(entity, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getPendingCustomerlistforMerchant", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Domain<List<CustomerMerchantEntity>>> getPendingCustomerlistforMerchant(@RequestParam("merchantid") String merchantid) {
+		Domain<List<CustomerMerchantEntity>> entity = userService.getPendingCustomerMerchnat(Integer.parseInt(merchantid));
+		return new ResponseEntity<Domain<List<CustomerMerchantEntity>>>(entity, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getConnectedMerchantlistforCustomer", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Domain<List<CustomerMerchantEntity>>> getConnectedMerchantlistforCustomer(@RequestParam("customerid") String customerid) {
+		Domain<List<CustomerMerchantEntity>> entity = userService.getMerchnatCustomer(Integer.parseInt(customerid));
+		return new ResponseEntity<Domain<List<CustomerMerchantEntity>>>(entity, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getPendingMerchantlistforCustomer", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Domain<List<CustomerMerchantEntity>>> getCustomerlistforMerchant(@RequestParam("customerid") String customerid) {
+		Domain<List<CustomerMerchantEntity>> entity = userService.getPendingMerchnatCustomer(Integer.parseInt(customerid));
 		return new ResponseEntity<Domain<List<CustomerMerchantEntity>>>(entity, HttpStatus.OK);
 	}
 	
@@ -240,10 +261,30 @@ public class UserController {
 	@RequestMapping(value = "/getUsersearch", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<Domain<List<UsersEntity>>> getUsersearch(
 			@RequestParam("usersearch") String usersearch,
-			@RequestParam("roleid") String roleid
+			@RequestParam("roleid") String roleid,
+			@RequestParam("id") String id
 			) {
 		int rid=Integer.parseInt(roleid);
-		Domain<List<UsersEntity>> entity = userService.getuserbysearch(usersearch, rid);
+		int cmid=Integer.parseInt(id);
+		Domain<List<UsersEntity>> entity = userService.getuserbysearch(usersearch, rid,cmid);
 		return new ResponseEntity<Domain<List<UsersEntity>>>(entity, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/updateCMrelation", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Domain<String>> updateCustomerMerchantSatus(
+			@RequestParam("rowid") String id,
+			@RequestParam("status") String status){
+		int rid=Integer.parseInt(id);
+		Domain<String> domain = userService.updateCustomerMerchantSatus(rid, status);
+		return new ResponseEntity<>(domain,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/updateWallet", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<Domain<String>> updateCMWallet(
+			@RequestParam("rowid") String id,
+			@RequestParam("wallet") String wallet){
+		int rid=Integer.parseInt(id);
+		Domain<String> domain = userService.updateWallet(rid, wallet);
+		return new ResponseEntity<>(domain,HttpStatus.OK);
 	}
 }

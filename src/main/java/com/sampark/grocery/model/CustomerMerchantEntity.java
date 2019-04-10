@@ -27,8 +27,20 @@ public class CustomerMerchantEntity {
 	@Column(name="user_id")
 	private Integer customerid;
 	
+	@Column(name="send_user_id")
+	private Integer senduserid;
+	
+	@Column(name="recive_user_id")
+	private Integer reciveuserid;
+	
 	@Column(name="status")
 	private String status;
+	
+	@Column(name="send_userid_status")
+	private String sendstatus;
+	
+	@Column(name="recive_userid_status")
+	private String recivestatus;
 	
 	@Column(name="created_at")
 	private Date createdAt;
@@ -40,6 +52,10 @@ public class CustomerMerchantEntity {
 	@JoinColumn(name="user_id",referencedColumnName="user_id",insertable=false,updatable=false)
 	private UsersEntity usersEntity;
 	
+	@ManyToOne(optional = false)
+	@JoinColumn(name="merchant_id",referencedColumnName="user_id",insertable=false,updatable=false)
+	private UsersEntity usersEntityM;
+
 	public Integer getRowId() {
 		return rowId;
 	}
@@ -64,6 +80,22 @@ public class CustomerMerchantEntity {
 		this.customerid = customerid;
 	}
 
+	public Integer getSenduserid() {
+		return senduserid;
+	}
+
+	public void setSenduserid(Integer senduserid) {
+		this.senduserid = senduserid;
+	}
+
+	public Integer getReciveuserid() {
+		return reciveuserid;
+	}
+
+	public void setReciveuserid(Integer reciveuserid) {
+		this.reciveuserid = reciveuserid;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -71,6 +103,23 @@ public class CustomerMerchantEntity {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getSendstatus() {
+		return sendstatus;
+	}
+
+	public void setSendstatus(String sendstatus) {
+		this.sendstatus = sendstatus;
+	}
+
+	public String getRecivestatus() {
+		return recivestatus;
+	}
+
+	public void setRecivestatus(String recivestatus) {
+		this.recivestatus = recivestatus;
+	}
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -86,6 +135,7 @@ public class CustomerMerchantEntity {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
 	public UsersEntity getUsersEntity() {
 		return usersEntity;
 	}
@@ -94,12 +144,22 @@ public class CustomerMerchantEntity {
 		this.usersEntity = usersEntity;
 	}
 
+	public UsersEntity getUsersEntityM() {
+		return usersEntityM;
+	}
+
+	public void setUsersEntityM(UsersEntity usersEntityM) {
+		this.usersEntityM = usersEntityM;
+	}
+
 	@Override
 	public String toString() {
 		return "CustomerMerchantEntity [rowId=" + rowId + ", merchantid=" + merchantid + ", customerid=" + customerid
-				+ ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", usersEntity="
-				+ usersEntity + "]";
+				+ ", senduserid=" + senduserid + ", reciveuserid=" + reciveuserid + ", status=" + status
+				+ ", sendstatus=" + sendstatus + ", recivestatus=" + recivestatus + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", usersEntity=" + usersEntity + ", usersEntityM=" + usersEntityM + "]";
 	}
+
 	
 	
 }
