@@ -25,15 +25,18 @@ public class DatabaseConfig {
 	public DriverManagerDataSource getDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+
 		
-		dataSource.setUrl("jdbc:mysql://localhost:3306/grocerydb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
-		dataSource.setUsername("root");
-		dataSource.setPassword("admin@123");
-		
-		/*dataSource.setUrl("jdbc:mysql://103.240.91.180:3306/grocerydb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+		 /* dataSource.setUrl(
+		  "jdbc:mysql://localhost:3306/grocerydb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+		  ); dataSource.setUsername("root"); dataSource.setPassword("admin@123");
+		 */
+
+		dataSource.setUrl(
+				"jdbc:mysql://103.240.91.180:3306/grocerydb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
 		dataSource.setUsername("sampark");
-		dataSource.setPassword("Se2fc@re");*/
-		
+		dataSource.setPassword("Se2fc@re");
+
 		return dataSource;
 	}
 
@@ -60,7 +63,7 @@ public class DatabaseConfig {
 
 	@Bean
 	public JpaVendorAdapter getHibernateAdapter() {
-		
+
 		return new HibernateJpaVendorAdapter();
 	}
 
@@ -69,7 +72,7 @@ public class DatabaseConfig {
 		return new Properties() {
 			{
 				setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-			   /* setProperty("hibernate.hbm2ddl.auto", "update");*/
+				/* setProperty("hibernate.hbm2ddl.auto", "update"); */
 				setProperty("hibernate.show_sql", "true");
 				setProperty("hibernate.format_sql", "false");
 			}

@@ -10,6 +10,7 @@ import com.sampark.grocery.model.MerchantCategory;
 import com.sampark.grocery.model.MerchantProductDetails;
 import com.sampark.grocery.model.MerchantProducts;
 import com.sampark.grocery.model.MerchantUpdateQuantity;
+import com.sampark.grocery.model.OrderPaymentEntity;
 import com.sampark.grocery.model.OrderStatusEntity;
 import com.sampark.grocery.model.ProductAdervtiesment;
 import com.sampark.grocery.model.ProductCartHistory;
@@ -85,6 +86,8 @@ public interface ProductService {
 	public Domain<Boolean> createProductCartHistory(ProductCartHistory productCartHistory);
 
 	public Domain<TrackOrderEntity> trackProductOrder(TrackOrderEntity trackOrderEntity);
+	
+	public Domain<OrderPaymentEntity> orderpayment(OrderPaymentEntity orderPaymentEntity);
 
 	public Domain<List<ProductCartHistory>> getRecentProductsCartDetail(Integer customerid);
 
@@ -109,4 +112,16 @@ public interface ProductService {
 	public Domain<List<ProductAdervtiesment>> getNearestMerchantAdvertiesment(Integer customerid,Float radius);
 	
 	public Domain<List<ProductUnitsWeightEntity>> getMerchantProductUnitDetail(Integer merchnatid, Integer Productidid);
+	
+	//public Domain<Boolean> updateProductStatus( int product_id, String status, int merchant_id, int category_id);
+
+	public Domain<List<ProductsEntity>> getAllProductforAdmin();
+
+	public Domain<List<ProductsEntity>> getProductListforUser();
+
+	public Domain<Boolean> updateProductStatus(Integer product_id, String status);
+
+	public Domain<Boolean> updateProductStatusForView(int product_id, Integer product_status);
+
+	public Domain<Boolean> updateUserStatus(int merchant_id, Integer product_status);
 }

@@ -11,120 +11,111 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class UsersEntity {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="user_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Integer userId;
-	
-	@Column(name="first_name")
+
+	@Column(name = "first_name")
+	@NotEmpty(message = "Please enter your first name.")
 	private String firstName;
-	@Column(name="last_name")
+	@NotEmpty(message = "Please enter your last name.")
+	@Column(name = "last_name")
 	private String lastName;
-	@Column(name="phone1")
+	@NotEmpty(message = "Please enter your contactnumber")
+	@Column(name = "phone1")
 	private String phone1;
-	@Column(name="phone2")
+	@Column(name = "phone2")
 	private String phone2;
-	@Column(name="email_id")
+	@NotEmpty(message = "Please enter your email address")
+	@Column(name = "email_id")
 	private String emailId;
-	
-	@Column(name="store_name")
+
+	@Column(name = "store_name")
 	private String storename;
-	
-	@Column(name="passwd")
+
+	@Column(name = "passwd")
+	@NotEmpty(message = "Please enter password")
 	private String passwd;
-	
-	@Column(name="role_id")
+
+	@Column(name = "role_id")
 	private Integer roleId;
-	
-	@Column(name="address_line_1")
+
+	@Column(name = "address_line_1")
 	private String addressLine1;
-	@Column(name="address_line_2")
+	@Column(name = "address_line_2")
 	private String addressLine2;
-	@Column(name="city")
+	@Column(name = "city")
 	private String city;
-	@Column(name="state")
+	@Column(name = "state")
 	private String state;
-	@Column(name="pincode")
+	@Column(name = "pincode")
 	private String pincode;
-	@Column(name="lat")
+	@Column(name = "lat")
 	private Double lat;
-	@Column(name="lng")
+	@Column(name = "lng")
 	private Double lng;
-	
-	@Column(name="sponsorby")
+
+	@Column(name = "sponsorby")
 	private String sponsorby;
-	
-	@Column(name="wallet")
+
+	@Column(name = "wallet")
 	private Double wallet;
-	
-	@Column(name="startshoptime")
+
+	@Column(name = "startshoptime")
 	private String startshoptime;
-	
-	@Column(name="endshoptime")
+
+	@Column(name = "endshoptime")
 	private String endshoptime;
-	
-	@Column(name="image_name")
+
+	@Column(name = "image_name")
 	private String imagename;
-	
-	@Column(name="address_proof_type")
+
+	@Column(name = "address_proof_type")
 	private String addressProofType;
-	@Column(name="address_proof_location")
+	@Column(name = "address_proof_location")
 	private String addressProofLocation;
-	@Column(name="id_proof_type")
+	@Column(name = "id_proof_type")
 	private String idProofType;
-	@Column(name="id_proof_location")
+	@Column(name = "id_proof_location")
 	private String idProofLocation;
-	@Column(name="gst_no")
+	@Column(name = "gst_no")
 	private String gstNo;
-	
-	@Column(name="token")
+
+	@Column(name = "token")
 	private String token;
-	@Column(name="created_at")
+	@Column(name = "created_at")
 	@CreationTimestamp
 	private Timestamp createdAt;
-	@Column(name="updated_at")
+	@Column(name = "updated_at")
 	@CreationTimestamp
 	private Timestamp updatedAt;
-	
+
 	@Transient
 	private String AuthToken;
-	
+
 	@Transient
 	private String imagepath;
-	
+
 	@Transient
 	private String authToken;
-	
-	public String getAuthToken() {
-		return authToken;
-	}
-
-	public void setAuthToken(String authToken) {
-		this.authToken = authToken;
-	}
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name="role_id",referencedColumnName="role_id",insertable=false,updatable=false)
+	@JoinColumn(name = "role_id", referencedColumnName = "role_id", insertable = false, updatable = false)
 	private RolesEntity roleEntity;
-	
+
+
 	@Transient
 	private ProductPriceEntity priceEntity;
-	
-	
-	public ProductPriceEntity getPriceEntity() {
-		return priceEntity;
-	}
-
-	public void setPriceEntity(ProductPriceEntity priceEntity) {
-		this.priceEntity = priceEntity;
-	}
 
 	public Integer getUserId() {
 		return userId;
@@ -173,20 +164,13 @@ public class UsersEntity {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
+
 	public String getStorename() {
 		return storename;
 	}
 
 	public void setStorename(String storename) {
 		this.storename = storename;
-	}
-
-	public String getImagename() {
-		return imagename;
-	}
-
-	public void setImagename(String imagename) {
-		this.imagename = imagename;
 	}
 
 	public String getPasswd() {
@@ -205,6 +189,7 @@ public class UsersEntity {
 		this.roleId = roleId;
 	}
 
+	
 	public String getAddressLine1() {
 		return addressLine1;
 	}
@@ -293,6 +278,14 @@ public class UsersEntity {
 		this.endshoptime = endshoptime;
 	}
 
+	public String getImagename() {
+		return imagename;
+	}
+
+	public void setImagename(String imagename) {
+		this.imagename = imagename;
+	}
+
 	public String getAddressProofType() {
 		return addressProofType;
 	}
@@ -356,13 +349,13 @@ public class UsersEntity {
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	public RolesEntity getRoleEntity() {
-		return roleEntity;
+
+	public String getAuthToken() {
+		return AuthToken;
 	}
 
-	public void setRoleEntity(RolesEntity roleEntity) {
-		this.roleEntity = roleEntity;
+	public void setAuthToken(String authToken) {
+		AuthToken = authToken;
 	}
 
 	public String getImagepath() {
@@ -371,6 +364,23 @@ public class UsersEntity {
 
 	public void setImagepath(String imagepath) {
 		this.imagepath = imagepath;
+	}
+
+	public RolesEntity getRoleEntity() {
+		return roleEntity;
+	}
+
+	public void setRoleEntity(RolesEntity roleEntity) {
+		this.roleEntity = roleEntity;
+	}
+
+
+	public ProductPriceEntity getPriceEntity() {
+		return priceEntity;
+	}
+
+	public void setPriceEntity(ProductPriceEntity priceEntity) {
+		this.priceEntity = priceEntity;
 	}
 
 	@Override
@@ -386,8 +396,7 @@ public class UsersEntity {
 				+ createdAt + ", updatedAt=" + updatedAt + ", AuthToken=" + AuthToken + ", imagepath=" + imagepath
 				+ ", authToken=" + authToken + ", roleEntity=" + roleEntity + ", priceEntity=" + priceEntity + "]";
 	}
-	
 
 	
-	
+
 }

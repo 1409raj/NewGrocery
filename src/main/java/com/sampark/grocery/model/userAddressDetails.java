@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class userAddressDetails {
 	
 	private Integer userId;
+	private Integer rowid;
 	private String firstName;
 	private String lastName;
 	private String phone1;
@@ -28,6 +29,12 @@ public class userAddressDetails {
 	}
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	public Integer getRowid() {
+		return rowid;
+	}
+	public void setRowid(Integer rowid) {
+		this.rowid = rowid;
 	}
 	public String getFirstName() {
 		return firstName;

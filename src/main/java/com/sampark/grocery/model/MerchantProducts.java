@@ -53,6 +53,9 @@ public class MerchantProducts {
 	@Column(name="updated_at")
 	private Date updatedOn;
 	
+	/*@Column(name="add_status")
+	private Integer add_status;*/
+	
 	@Transient
 	private String imagepath;
 	
@@ -65,9 +68,14 @@ public class MerchantProducts {
 	@Transient
 	private String arraystringwunit;
 	
+	/*@ManyToOne(optional = false)
+	@JoinColumn(name="set_status",referencedColumnName="add_status",insertable=false,updatable=false)
+	private ProductsEntity pStatus;*/
+	
 	@ManyToOne(optional = false)
 	@JoinColumn(name="merchant_id",referencedColumnName="user_id",insertable=false,updatable=false)
 	private UsersEntity merchantDetails;
+	
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name="product_id",referencedColumnName="product_id",insertable=false,updatable=false)
@@ -80,8 +88,7 @@ public class MerchantProducts {
 	@ManyToOne(optional = false)
 	@JoinColumn(name="price_id",referencedColumnName="price_id",insertable=false,updatable=false)
 	private ProductPriceEntity prPriceEntity;
-	
-	
+
 	public Integer getRowid() {
 		return rowid;
 	}
@@ -105,17 +112,7 @@ public class MerchantProducts {
 	public void setProductid(Integer productid) {
 		this.productid = productid;
 	}
- 
 
-	public ProductsEntity getPrEntity() {
-		return prEntity;
-	}
-
-	public void setPrEntity(ProductsEntity prEntity) {
-		this.prEntity = prEntity;
-	}
-
-	
 	public Integer getCategoryid() {
 		return categoryid;
 	}
@@ -139,23 +136,7 @@ public class MerchantProducts {
 	public void setUnitid(Integer unitid) {
 		this.unitid = unitid;
 	}
-	
-	public ProductUnitsWeightEntity getPrWeightEntity() {
-		return prWeightEntity;
-	}
 
-	public void setPrWeightEntity(ProductUnitsWeightEntity prWeightEntity) {
-		this.prWeightEntity = prWeightEntity;
-	}
-
-	public String getImagepath() {
-		return imagepath;
-	}
-
-	public void setImagepath(String imagepath) {
-		this.imagepath = imagepath;
-	}
-	
 	public Integer getPriceid() {
 		return priceid;
 	}
@@ -163,7 +144,7 @@ public class MerchantProducts {
 	public void setPriceid(Integer priceid) {
 		this.priceid = priceid;
 	}
-	
+
 	public Integer getVendorid() {
 		return vendorid;
 	}
@@ -179,6 +160,7 @@ public class MerchantProducts {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
+
 	public Integer getNoOfpurchase() {
 		return noOfpurchase;
 	}
@@ -203,13 +185,14 @@ public class MerchantProducts {
 		this.updatedOn = updatedOn;
 	}
 
-	public ProductPriceEntity getPrPriceEntity() {
-		return prPriceEntity;
+	public String getImagepath() {
+		return imagepath;
 	}
 
-	public void setPrPriceEntity(ProductPriceEntity prPriceEntity) {
-		this.prPriceEntity = prPriceEntity;
+	public void setImagepath(String imagepath) {
+		this.imagepath = imagepath;
 	}
+
 	public String getArraystringweight() {
 		return arraystringweight;
 	}
@@ -233,13 +216,37 @@ public class MerchantProducts {
 	public void setArraystringwunit(String arraystringwunit) {
 		this.arraystringwunit = arraystringwunit;
 	}
-	
+
 	public UsersEntity getMerchantDetails() {
 		return merchantDetails;
 	}
 
 	public void setMerchantDetails(UsersEntity merchantDetails) {
 		this.merchantDetails = merchantDetails;
+	}
+
+	public ProductsEntity getPrEntity() {
+		return prEntity;
+	}
+
+	public void setPrEntity(ProductsEntity prEntity) {
+		this.prEntity = prEntity;
+	}
+
+	public ProductUnitsWeightEntity getPrWeightEntity() {
+		return prWeightEntity;
+	}
+
+	public void setPrWeightEntity(ProductUnitsWeightEntity prWeightEntity) {
+		this.prWeightEntity = prWeightEntity;
+	}
+
+	public ProductPriceEntity getPrPriceEntity() {
+		return prPriceEntity;
+	}
+
+	public void setPrPriceEntity(ProductPriceEntity prPriceEntity) {
+		this.prPriceEntity = prPriceEntity;
 	}
 
 	@Override
@@ -253,6 +260,6 @@ public class MerchantProducts {
 				+ prEntity + ", prWeightEntity=" + prWeightEntity + ", prPriceEntity=" + prPriceEntity + "]";
 	}
 
-
+	
 	
 }

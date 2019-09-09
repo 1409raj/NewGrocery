@@ -15,6 +15,7 @@ public class StorNameModel {
 	private String imagepath;
 	private String startshoptime;
 	private String endshoptime;
+	private Integer product_status;
 	public Integer getMerchantid() {
 		return merchantid;
 	}
@@ -57,7 +58,6 @@ public class StorNameModel {
 	public void setLng(Double lng) {
 		this.lng = lng;
 	}
-	
 	public String getSponsorby() {
 		return sponsorby;
 	}
@@ -82,8 +82,20 @@ public class StorNameModel {
 	public void setEndshoptime(String endshoptime) {
 		this.endshoptime = endshoptime;
 	}
-	
-	
+	public Integer getProduct_status() {
+		return product_status;
+	}
+	public void setProduct_status(Integer product_status) {
+		this.product_status = product_status;
+	}
+	@Override
+	public String toString() {
+		return "StorNameModel [merchantid=" + merchantid + ", merchantfirstname=" + merchantfirstname
+				+ ", merchantlastname=" + merchantlastname + ", merchantemailid=" + merchantemailid + ", storename="
+				+ storename + ", lat=" + lat + ", lng=" + lng + ", sponsorby=" + sponsorby + ", imagepath=" + imagepath
+				+ ", startshoptime=" + startshoptime + ", endshoptime=" + endshoptime + ", product_status="
+				+ product_status + "]";
+	}
 	
 	
 }

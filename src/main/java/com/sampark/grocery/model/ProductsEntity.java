@@ -85,30 +85,6 @@ public class ProductsEntity {
 	@Transient
 	private List<Integer> quantity;
 
-	public String getCategoryName() {
-		return categoryName;
-	}
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
-	public ProductPriceEntity getProductPrice() {
-		return productPrice;
-	}
-
-	public void setProductPrice(ProductPriceEntity productPrice) {
-		this.productPrice = productPrice;
-	}
-
-	public Integer getPriceid() {
-		return priceid;
-	}
-
-	public void setPriceid(Integer priceid) {
-		this.priceid = priceid;
-	}
-
 	public Integer getProductId() {
 		return productId;
 	}
@@ -165,6 +141,94 @@ public class ProductsEntity {
 		this.updatedOn = updatedOn;
 	}
 
+	public Integer getPriceid() {
+		return priceid;
+	}
+
+	public void setPriceid(Integer priceid) {
+		this.priceid = priceid;
+	}
+
+	public Integer getUnitid() {
+		return unitid;
+	}
+
+	public void setUnitid(Integer unitid) {
+		this.unitid = unitid;
+	}
+
+	public Integer getImageid() {
+		return imageid;
+	}
+
+	public void setImageid(Integer imageid) {
+		this.imageid = imageid;
+	}
+
+	public Integer getNoOfpurchase() {
+		return noOfpurchase;
+	}
+
+	public void setNoOfpurchase(Integer noOfpurchase) {
+		this.noOfpurchase = noOfpurchase;
+	}
+
+	public ProductImageEntity getAllproImageEntity() {
+		return AllproImageEntity;
+	}
+
+	public void setAllproImageEntity(ProductImageEntity allproImageEntity) {
+		AllproImageEntity = allproImageEntity;
+	}
+
+	public ProductUnitsWeightEntity getAllprWeightEntity() {
+		return AllprWeightEntity;
+	}
+
+	public void setAllprWeightEntity(ProductUnitsWeightEntity allprWeightEntity) {
+		AllprWeightEntity = allprWeightEntity;
+	}
+
+	public ProductPriceEntity getAllproPriceEntity() {
+		return AllproPriceEntity;
+	}
+
+	public void setAllproPriceEntity(ProductPriceEntity allproPriceEntity) {
+		AllproPriceEntity = allproPriceEntity;
+	}
+
+	public UsersEntity getUsersentity() {
+		return usersentity;
+	}
+
+	public void setUsersentity(UsersEntity usersentity) {
+		this.usersentity = usersentity;
+	}
+
+	public ProductPriceEntity getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(ProductPriceEntity productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public ProductImageEntity getProimage() {
+		return proimage;
+	}
+
+	public void setProimage(ProductImageEntity proimage) {
+		this.proimage = proimage;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
 	public List<ProductPriceEntity> getProductPrices() {
 		return productPrices;
 	}
@@ -189,76 +253,12 @@ public class ProductsEntity {
 		this.productweight = productweight;
 	}
 
-	public ProductImageEntity getProimage() {
-		return proimage;
-	}
-
-	public void setProimage(ProductImageEntity proimage) {
-		this.proimage = proimage;
-	}
-
-	public Integer getUnitid() {
-		return unitid;
-	}
-
-	public void setUnitid(Integer unitid) {
-		this.unitid = unitid;
-	}
-
-	public ProductUnitsWeightEntity getAllprWeightEntity() {
-		return AllprWeightEntity;
-	}
-
-	public void setAllprWeightEntity(ProductUnitsWeightEntity allprWeightEntity) {
-		AllprWeightEntity = allprWeightEntity;
-	}
-
-	public Integer getImageid() {
-		return imageid;
-	}
-
-	public void setImageid(Integer imageid) {
-		this.imageid = imageid;
-	}
-
-	public ProductImageEntity getAllproImageEntity() {
-		return AllproImageEntity;
-	}
-
-	public void setAllproImageEntity(ProductImageEntity allproImageEntity) {
-		AllproImageEntity = allproImageEntity;
-	}
-
 	public List<Integer> getQuantity() {
 		return quantity;
 	}
 
 	public void setQuantity(List<Integer> quantity) {
 		this.quantity = quantity;
-	}
-
-	public Integer getNoOfpurchase() {
-		return noOfpurchase;
-	}
-
-	public void setNoOfpurchase(Integer noOfpurchase) {
-		this.noOfpurchase = noOfpurchase;
-	}
-
-	public ProductPriceEntity getAllproPriceEntity() {
-		return AllproPriceEntity;
-	}
-
-	public void setAllproPriceEntity(ProductPriceEntity allproPriceEntity) {
-		AllproPriceEntity = allproPriceEntity;
-	}
-
-	public UsersEntity getUsersentity() {
-		return usersentity;
-	}
-
-	public void setUsersentity(UsersEntity usersentity) {
-		this.usersentity = usersentity;
 	}
 
 	@Override

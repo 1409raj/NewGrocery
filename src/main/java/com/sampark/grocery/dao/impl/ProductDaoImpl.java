@@ -18,6 +18,7 @@ import com.sampark.grocery.model.MerchantDetails;
 import com.sampark.grocery.model.MerchantProductDetails;
 import com.sampark.grocery.model.MerchantProducts;
 import com.sampark.grocery.model.OrderCart;
+import com.sampark.grocery.model.OrderPaymentEntity;
 import com.sampark.grocery.model.OrderStatusEntity;
 import com.sampark.grocery.model.ProductCartHistory;
 import com.sampark.grocery.model.ProductCategoryEntity;
@@ -298,7 +299,7 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return weightlist;
 	}
-	
+
 	@Override
 	public ProductUnitsWeightEntity getUnitweightbyid(Integer id) {
 		ProductUnitsWeightEntity unitlist = new ProductUnitsWeightEntity();
@@ -307,7 +308,7 @@ public class ProductDaoImpl implements ProductDao {
 		try {
 			query = getEntityManager().createNativeQuery(sqlQuery, ProductUnitsWeightEntity.class);
 			query.setParameter("id", id);
-			unitlist =  (ProductUnitsWeightEntity) query.getSingleResult();
+			unitlist = (ProductUnitsWeightEntity) query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -891,7 +892,7 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return mproduct;
 	}
-	
+
 	@Override
 	public MerchantProducts getMerchantids(Integer productid, Integer unitid, Integer priceid) {
 		MerchantProducts mproduct = new MerchantProducts();
@@ -908,7 +909,6 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return mproduct;
 	}
-
 
 	@Override
 	@Transactional
@@ -1103,7 +1103,7 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return null;
 	}
-	
+
 	@Override
 	@Transactional
 	public Boolean CanceldecreaseProductMerchanttnoOfPurchase(Integer pid, Integer wid, Integer mid, Integer quantity) {
@@ -1134,9 +1134,6 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return null;
 	}
-
-
-	
 
 	@Override
 	public List<ProductCartHistory> getRecentProductsCartDetail(Integer customerid) {
@@ -1375,16 +1372,124 @@ public class ProductDaoImpl implements ProductDao {
 	@Transactional
 	public Boolean saveCategoryforMerchant(MerchantCategory merchantCategory) {
 		entityManager.persist(merchantCategory);
-		if(merchantCategory.getRowId()>0)
-		{
-		  return true;	
-		}
-		else
-		{
+		if (merchantCategory.getRowId() > 0) {
+			return true;
+		} else {
 			return false;
-		}	
+		}
 
 	}
 
+	@Override
+	@Transactional
+	public Boolean ProductOrderPayment(OrderPaymentEntity orderPaymentEntity) {
+		getEntityManager().persist(orderPaymentEntity);
+		if (orderPaymentEntity.getId() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	@Override
+	@Transactional
+	public boolean updateProductStatus(String status) {
+		String sqlQuery = "update  grocerydb.products set status=:status";
+
+		Query query = null;
+		query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("status", status);
+
+		int i = query.executeUpdate();
+		if (i > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Transactional
+	@Override
+	public Boolean updateProductStatus(Integer product_id, String status) {
+		String sqlQuery = "update grocerydb.products set status=:status where product_id=:product_id ";
+
+		Query query = null;
+		query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("product_id", product_id);
+		query.setParameter("status", status);
+		int i = query.executeUpdate();
+		if (i > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public List<ProductsEntity> getAllProductforAdmin() {
+		List<ProductsEntity> list = new ArrayList<ProductsEntity>();
+		String sqlQuery = "Select * from grocerydb.products ";
+		Query query = null;
+		try {
+			query = getEntityManager().createNativeQuery(sqlQuery, ProductsEntity.class);
+			list = (ArrayList<ProductsEntity>) query.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<ProductsEntity> getAllProductforUser() {
+		List<ProductsEntity> list = new ArrayList<ProductsEntity>();
+		String sqlQuery = "Select * from grocerydb.products where status = 'Y' order by product_id ";
+		Query query = null;
+		try {
+
+			query = getEntityManager().createNativeQuery(sqlQuery, ProductsEntity.class);
+			list = (ArrayList<ProductsEntity>) query.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+
+	}
+
+	@Override
+	@Transactional
+	public boolean updateProductStatusForView(int product_id, Integer p_status) {
+		String sqlQuery = "update grocerydb.products set p_status=:p_status where product_id=:product_id ";
+
+		Query query = null;
+		query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("product_id", product_id);
+		query.setParameter("p_status", p_status);
+		int i = query.executeUpdate();
+		if (i > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public boolean updateUserStatus(int merchant_id, Integer product_status) {
+		String sqlQuery = "update grocerydb.users set product_status=:product_status where user_id=:user_id ";
+
+		Query query = null;
+		query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("product_status", product_status);
+		query.setParameter("user_id", merchant_id);
+		int i = query.executeUpdate();
+		if (i > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

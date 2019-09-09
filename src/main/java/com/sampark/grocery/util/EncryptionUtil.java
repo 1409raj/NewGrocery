@@ -58,11 +58,11 @@ public class EncryptionUtil {
         return null;
     }
     public static void main(String[] args) {
-		String s = "";
+		String s = "12345";
 		String s1 = "";
 		
-		s=new EncryptionUtil().encrypt("nishant@123");
-		
+		s=new EncryptionUtil().encrypt(s);
+		System.out.println("password is    "+s  );
 		s1=new EncryptionUtil().decrypt(s);
 		System.out.println(s+"    "+s1);
 	}

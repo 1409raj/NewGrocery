@@ -132,7 +132,7 @@ public class UserDaoImpl implements UserDao {
 	@Transactional
 	public Boolean updateCustomerDetails(Integer userid, String address1, String address2, String city, String state,
 			String pincode, String fname, String lname, String phone1, String email, String storename, Double lat,
-			Double lng,String startshoptime,String endshoptime,String sponsorby) {
+			Double lng, String startshoptime, String endshoptime, String sponsorby) {
 		String sqlQuery = "update  grocerydb.users set address_line_1=:address1, address_line_2=:address2, city=:city, state=:state, pincode=:pincode, phone1=:phone1, first_name=:fname, last_name=:lname, email_id=:email,store_name=:storename, lat=:lat,lng=:lng,startshoptime=:startshoptime,endshoptime=:endshoptime,sponsorby=:sponsorby where user_id=:userid";
 
 		Query query = null;
@@ -215,15 +215,14 @@ public class UserDaoImpl implements UserDao {
 		}
 		return found;
 	}
-	
-	
+
 	@Override
 	public CustomerMerchantEntity ismerchantcustomer(Integer merchantid, Integer customerid) {
 		CustomerMerchantEntity bean = new CustomerMerchantEntity();
 		String sqlQuery = "Select * from grocerydb.merchant_customer where merchant_id = :merchantid and user_id=:customerid";
 		Query query = null;
 		try {
-			
+
 			query = getEntityManager().createNativeQuery(sqlQuery, CustomerMerchantEntity.class);
 			query.setParameter("merchantid", merchantid);
 			query.setParameter("customerid", customerid);
@@ -249,7 +248,7 @@ public class UserDaoImpl implements UserDao {
 		}
 		return list;
 	}
-	
+
 	@Override
 	public List<CustomerMerchantEntity> getPendingCustomerMerchnat(Integer merchantid) {
 		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
@@ -265,7 +264,7 @@ public class UserDaoImpl implements UserDao {
 		}
 		return list;
 	}
-	
+
 	@Override
 	public List<CustomerMerchantEntity> getMerchnatCustomer(Integer customerid) {
 		List<CustomerMerchantEntity> list = new ArrayList<CustomerMerchantEntity>();
@@ -298,7 +297,6 @@ public class UserDaoImpl implements UserDao {
 		return list;
 	}
 
-
 	@Override
 	@Transactional
 	public Boolean updateUserImage(Integer userid, String imagename) {
@@ -316,7 +314,7 @@ public class UserDaoImpl implements UserDao {
 			return false;
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public Boolean deleteUserImage(Integer userid) {
@@ -340,7 +338,7 @@ public class UserDaoImpl implements UserDao {
 		Float rad = radius;
 		ArrayList<UsersEntity> NearMerchant = new ArrayList<UsersEntity>();
 		String sqlQuery = "SELECT * FROM users WHERE acos(sin(" + lat + ") * sin(lat) + cos(" + lat
-				+ ") * cos(lat) * cos(lng - (" + lng + "))) * 6371 <= "+ rad +" and role_id='2'";
+				+ ") * cos(lat) * cos(lng - (" + lng + "))) * 6371 <= " + rad + " and role_id='2'";
 		Query query = null;
 		try {
 			try {
@@ -377,13 +375,12 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<ProductAdervtiesment> getNearestmerchantAdvertiesment(Integer merchnatid) {
 		List<ProductAdervtiesment> list = new ArrayList<ProductAdervtiesment>();
-		String sqlQuery = "Select * from grocerydb.products_Adertiesment WHERE status='Y' and merchant_id=:merchnatid";
+		String sqlQuery = "Select * from grocerydb.products_adertiesment WHERE status='Y' and merchant_id=:merchnatid";
 		Query query = null;
 		try {
 			query = getEntityManager().createNativeQuery(sqlQuery, ProductAdervtiesment.class);
 			query.setParameter("merchnatid", merchnatid);
 			list = (ArrayList<ProductAdervtiesment>) query.getResultList();
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -428,7 +425,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	@Transactional
 	public Boolean updateCustomerMerchantSatus(Integer id, String status) {
-		
+
 		String sqlQuery = "update  grocerydb.merchant_customer set status=:status, send_userid_status=:status, recive_userid_status=:status where row_id=:id";
 
 		Query query = null;
@@ -462,5 +459,4 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
-	
 }

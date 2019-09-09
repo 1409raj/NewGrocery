@@ -8,6 +8,7 @@ import com.sampark.grocery.model.MerchantDetails;
 import com.sampark.grocery.model.MerchantProductDetails;
 import com.sampark.grocery.model.MerchantProducts;
 import com.sampark.grocery.model.OrderCart;
+import com.sampark.grocery.model.OrderPaymentEntity;
 import com.sampark.grocery.model.OrderStatusEntity;
 import com.sampark.grocery.model.ProductCartHistory;
 import com.sampark.grocery.model.ProductCategoryEntity;
@@ -71,7 +72,7 @@ public interface ProductDao {
 
 	public Boolean saveproductImage(ProductImageEntity productImageEntity);
 
-	public List<MerchantProducts> getMerchantProductList(Integer merchnatid, Integer Categoryid);
+	public List<MerchantProducts> getMerchantProductList(Integer merchnatid, Integer categoryid);
 
 	public List<MerchantProducts> getMerchantProductListbymerchantid(Integer merchnatid);
 
@@ -156,5 +157,19 @@ public interface ProductDao {
 	public Boolean UpdateOrderstatus(String orid, Integer posid);
 	
 	public List<MerchantCategory> getMerCatList(Integer merchantid);
+
+	public Boolean ProductOrderPayment(OrderPaymentEntity orderPaymentEntity);
+
+	public boolean updateProductStatus(String status);
+
+	public Boolean updateProductStatus(Integer product_id, String newstatus);
+
+	public List<ProductsEntity> getAllProductforAdmin();
+
+	public List<ProductsEntity> getAllProductforUser();
+
+	public boolean updateProductStatusForView(int product_id, Integer newProductstatus);
+
+	public boolean updateUserStatus(int merchant_id, Integer newProductstatus);
 
 }

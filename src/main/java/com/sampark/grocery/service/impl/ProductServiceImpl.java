@@ -3,20 +3,13 @@ package com.sampark.grocery.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sampark.grocery.constant.ApiConstants;
-import com.sampark.grocery.dao.Inter;
 import com.sampark.grocery.dao.ProductDao;
 import com.sampark.grocery.dao.UserDao;
 import com.sampark.grocery.dao.impl.ProductDaoImpl;
@@ -25,13 +18,12 @@ import com.sampark.grocery.model.CustomerViewPage;
 import com.sampark.grocery.model.DailyUseProducts;
 import com.sampark.grocery.model.Domain;
 import com.sampark.grocery.model.MerchantCategory;
-import com.sampark.grocery.model.MerchantDetails;
 import com.sampark.grocery.model.MerchantOrder;
 import com.sampark.grocery.model.MerchantProductDetails;
 import com.sampark.grocery.model.MerchantProducts;
 import com.sampark.grocery.model.MerchantUpdateQuantity;
 import com.sampark.grocery.model.OrderCart;
-import com.sampark.grocery.model.OrderStatusDate;
+import com.sampark.grocery.model.OrderPaymentEntity;
 import com.sampark.grocery.model.OrderStatusEntity;
 import com.sampark.grocery.model.ProductAdervtiesment;
 import com.sampark.grocery.model.ProductCartHistory;
@@ -42,6 +34,7 @@ import com.sampark.grocery.model.ProductQuantityLimit;
 import com.sampark.grocery.model.ProductUnitsWeightEntity;
 import com.sampark.grocery.model.ProductsCartEntity;
 import com.sampark.grocery.model.ProductsEntity;
+import com.sampark.grocery.model.ProductsModel;
 import com.sampark.grocery.model.RecntproductList;
 import com.sampark.grocery.model.TrackOrderEntity;
 import com.sampark.grocery.model.UsersEntity;
@@ -196,15 +189,14 @@ public class ProductServiceImpl implements ProductService {
 		list = dao.getCategoryList();
 		merchantcat = dao.getMerCatList(customerid);
 		for (ProductCategoryEntity modelListdata : list) {
-            for (MerchantCategory prevListdata : merchantcat) {
-                if (modelListdata.getCategoryId().equals(prevListdata.getCategoryid())
-                        ) {
-                	modelListdata.setCatExist("Y");
+			for (MerchantCategory prevListdata : merchantcat) {
+				if (modelListdata.getCategoryId().equals(prevListdata.getCategoryid())) {
+					modelListdata.setCatExist("Y");
 
-                }
-            }
+				}
+			}
 
-        }
+		}
 		if (list.size() > 0) {
 			domain.setObject(list);
 			domain.setMessage("category list is not empty.");
@@ -324,7 +316,7 @@ public class ProductServiceImpl implements ProductService {
 			String nunit = wunitList.get(i);
 			productPriceEntity.setPrice(nprice);
 			productPriceEntity.setProductid(merchnatproducts.getProductid());
-			productPriceEntity.setStatus("Y");
+			productPriceEntity.setStatus("N");
 			createPrice(productPriceEntity);
 			int cpriceid = productPriceEntity.getPriceId();
 
@@ -896,7 +888,9 @@ public class ProductServiceImpl implements ProductService {
 			while (it.hasNext()) {
 				productsEntity = it.next();
 				DailyUseProducts dailyUseProducts = new DailyUseProducts();
-				merchantProducts = dao.getMerchantids(productsEntity.getProductId(), productsEntity.getAllprWeightEntity().getRowId(), productsEntity.getAllproPriceEntity().getPriceId());
+				merchantProducts = dao.getMerchantids(productsEntity.getProductId(),
+						productsEntity.getAllprWeightEntity().getRowId(),
+						productsEntity.getAllproPriceEntity().getPriceId());
 				usersEntity = dao.getSingleMerchantDetails(merchantProducts.getMerchantid());
 				productsEntity.getAllproImageEntity().setImagepath(ApiConstants.server_url + "images?image="
 						+ productsEntity.getAllproImageEntity().getImage() + "&folder=image");
@@ -1179,7 +1173,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Domain<CustomerViewPage> customerviewpage(Integer customerid,Float radius) {
+	public Domain<CustomerViewPage> customerviewpage(Integer customerid, Float radius) {
 		Domain<CustomerViewPage> domain = new Domain<CustomerViewPage>();
 		CustomerViewPage customerViewPage = new CustomerViewPage();
 		Domain<List<ProductsEntity>> daily = new Domain<List<ProductsEntity>>();
@@ -1249,16 +1243,17 @@ public class ProductServiceImpl implements ProductService {
 		user = udao.getallmerchhantdetails(customerid);
 		list = udao.getNearestmerchantDetail(user, radius);
 
-//		List NearestMerchnatAdvert = new ArrayList<>();
+		// List NearestMerchnatAdvert = new ArrayList<>();
 
-		Iterator<UsersEntity> it = list.iterator();
+		listad = udao.getNearestmerchantAdvertiesment(user.getUserId());
+		listad.forEach(h -> h.setImagepath(
+				ApiConstants.server_url + "images?image=" + h.getImagename() + "&folder=advertiesments"));
+
+		/*Iterator<UsersEntity> it = list.iterator();
 		while (it.hasNext()) {
 			user = it.next();
-			listad = udao.getNearestmerchantAdvertiesment(user.getUserId());
-			listad.forEach(h -> h.setImagepath(ApiConstants.server_url + "images?image=" + h.getImagename() + "&folder=advertiesments"));
-
-
-		}
+			
+		}*/
 		if (list.size() > 0) {
 			domain.setObject(listad);
 			domain.setMessage("Nearest Merchants Adevertiesment details.");
@@ -1273,23 +1268,21 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Domain<String> saveCategoryforMerchant(MerchantCategory merchantCategory) {
-		  Domain<String> s = new Domain<String>();
-			if(dao.saveCategoryforMerchant(merchantCategory))
-			{
-				s.setMessage("Category added successfully.");
-				s.setHasError(false);		
-			}
-			else
-			{
-				s.setMessage("Category not added");
-				s.setHasError(true);		
-			}
+		Domain<String> s = new Domain<String>();
+		if (dao.saveCategoryforMerchant(merchantCategory)) {
+			s.setMessage("Category added successfully.");
+			s.setHasError(false);
+		} else {
+			s.setMessage("Category not added");
+			s.setHasError(true);
+		}
 		return s;
 	}
 
 	@Override
-	public Domain<List<ProductUnitsWeightEntity>> getMerchantProductUnitDetail(Integer merchnatid, Integer Productidid) {
-		
+	public Domain<List<ProductUnitsWeightEntity>> getMerchantProductUnitDetail(Integer merchnatid,
+			Integer Productidid) {
+
 		Domain<List<ProductUnitsWeightEntity>> domain = new Domain<List<ProductUnitsWeightEntity>>();
 		MerchantProducts mlist = new MerchantProducts();
 		ProductUnitsWeightEntity ulist = new ProductUnitsWeightEntity();
@@ -1298,12 +1291,12 @@ public class ProductServiceImpl implements ProductService {
 		list = dao.getMerchantunitsExits(merchnatid, Productidid); // ignore method name only for reuse
 		Iterator<MerchantProducts> it = list.iterator();
 		while (it.hasNext()) {
-			
+
 			mlist = it.next();
 			ulist = dao.getUnitweightbyid(mlist.getUnitid());
 			unitlist.add(ulist);
 		}
-        System.out.println(unitlist);
+		System.out.println(unitlist);
 		if (list.size() > 0) {
 
 			domain.setObject(unitlist);
@@ -1315,6 +1308,142 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 		return domain;
+	}
+
+	@Override
+	public Domain<OrderPaymentEntity> orderpayment(OrderPaymentEntity orderPaymentEntity) {
+		Domain<OrderPaymentEntity> domain = new Domain<OrderPaymentEntity>();
+
+		if (dao.ProductOrderPayment(orderPaymentEntity)) {
+			domain.setMessage("Order Payment Successfully");
+			domain.setHasError(false);
+		} else {
+			domain.setMessage("Order Payment Error");
+			domain.setHasError(true);
+		}
+
+		return domain;
+	}
+
+	@Override
+	public Domain<Boolean> updateProductStatus(Integer product_id, String status) {
+		Domain<Boolean> domain = new Domain<Boolean>();
+		if (status.equalsIgnoreCase("Y")) {
+			String newstatus = "N";
+			dao.updateProductStatus(product_id, newstatus);
+			domain.setMessage("product is disabled now ");
+			domain.setHasError(false);
+		} else {
+			String newstatus = "Y";
+			dao.updateProductStatus(product_id, newstatus);
+			domain.setMessage("product is enabled now ");
+			domain.setHasError(false);
+		}
+		return domain;
+
+	}
+
+	@Override
+	public Domain<List<ProductsEntity>> getAllProductforAdmin() {
+		List<ProductsEntity> list = new ArrayList<ProductsEntity>();
+		Domain<List<ProductsEntity>> domain = new Domain<List<ProductsEntity>>();
+		ProductsEntity productEntity = new ProductsEntity();
+		List Storelist = new ArrayList<>();
+		list = dao.getAllProductforAdmin();
+		Iterator<ProductsEntity> it = list.iterator();
+		while (it.hasNext()) {
+			productEntity = it.next();
+			// StorNameModel storNameModel = new StorNameModel();
+			ProductsModel model = new ProductsModel();
+			model.setProductid(productEntity.getProductId());
+			model.setProductname(productEntity.getName());
+			model.setDesccription(productEntity.getDescription());
+			model.setStatus(productEntity.getStatus());
+			// model.setAdd_status(productEntity.getAdd_status());
+			model.setImageid(
+					ApiConstants.server_url + "images?image=" + productEntity.getImageid() + "&folder=profileimage");
+			Storelist.add(model);
+		}
+		if (list.size() > 0) {
+			domain.setObject(Storelist);
+			domain.setMessage("product is not empty.");
+			domain.setHasError(false);
+		} else {
+			domain.setMessage("product does not exist.");
+			domain.setHasError(true);
+		}
+		// TODO Auto-generated method stub
+		return domain;
+	}
+
+	@Override
+	public Domain<List<ProductsEntity>> getProductListforUser() {
+		List<ProductsEntity> list = new ArrayList<ProductsEntity>();
+		Domain<List<ProductsEntity>> domain = new Domain<List<ProductsEntity>>();
+		ProductsEntity usersEntity = new ProductsEntity();
+		List Storelist = new ArrayList<>();
+		list = dao.getAllProductforUser();
+		Iterator<ProductsEntity> it = list.iterator();
+		while (it.hasNext()) {
+			usersEntity = it.next();
+			// StorNameModel storNameModel = new StorNameModel();
+			ProductsModel model = new ProductsModel();
+			model.setProductid(usersEntity.getProductId());
+			model.setProductname(usersEntity.getName());
+			model.setDesccription(usersEntity.getDescription());
+			model.setStatus(usersEntity.getStatus());
+			model.setImageid(
+					ApiConstants.server_url + "images?image=" + usersEntity.getImageid() + "&folder=profileimage");
+			Storelist.add(model);
+		}
+		if (list.size() > 0) {
+			domain.setObject(Storelist);
+			domain.setMessage("product is not empty.");
+			domain.setHasError(false);
+		} else {
+			domain.setMessage("product does not exist.");
+			domain.setHasError(true);
+		}
+		// TODO Auto-generated method stub
+		return domain;
+	}
+
+	@Override
+	public Domain<Boolean> updateProductStatusForView(int product_id, Integer product_status) {
+		Domain<Boolean> domain = new Domain<Boolean>();
+		if (product_status.equals(1)) {
+			Integer newProductstatus = 2;
+			dao.updateProductStatusForView(product_id, newProductstatus);
+			domain.setMessage("product is disabled now ");
+			domain.setHasError(false);
+		} else {
+			Integer newProductstatus = 2;
+			dao.updateProductStatusForView(product_id, newProductstatus);
+			domain.setMessage("product is enabled now ");
+			domain.setHasError(false);
+		}
+		return domain;
+
+	}
+
+	@Override
+	public Domain<Boolean> updateUserStatus(int merchant_id, Integer product_status) {
+		Domain<Boolean> domain = new Domain<Boolean>();
+		boolean product = dao.getallmerchhantproducts().contains(product_status.equals(2));
+		System.out.println(product);
+		if (product_status.equals(1)) {
+			Integer newProductstatus = 2;
+			dao.updateUserStatus(merchant_id, newProductstatus);
+			domain.setMessage("Users Product status is not new ");
+			domain.setHasError(false);
+		} else {
+			Integer newProductstatus = 1;
+			dao.updateUserStatus(merchant_id, newProductstatus);
+			domain.setMessage("Users Product status is  new");
+			domain.setHasError(false);
+		}
+		return domain;
+
 	}
 
 	/*
